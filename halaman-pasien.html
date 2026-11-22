@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skrining Awal Tumor Payudara</title>
+<style>
+:root{--bg:#F2F6F7;--card:#fff;--ink:#14262B;--mute:#55696E;--line:#D5E0E2;--accent:#0F6B74;--accent-d:#0A4F56;--warn-bg:#FFF4DC;--warn-ink:#7A4A00;--r1:#2E8B57;--r2:#7DAF3C;--r3:#E0B21F;--r4:#E5782A;--r5:#C23B3B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Segoe UI",system-ui,-apple-system,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.25;margin:0 0 .5em}
+h1{font-size:2.1rem}h2{font-size:1.5rem}h3{font-size:1.1rem}
+.notice{position:sticky;top:0;z-index:10;background:var(--warn-bg);color:var(--warn-ink);border-bottom:1px solid #EBCB8B;padding:.55rem 1rem;font-size:.9rem;text-align:center}
+.wrap{max-width:860px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.brand{font-family:Georgia,serif;font-weight:700;color:var(--accent-d);padding:1rem 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.5rem}
+.view{display:none}.view.on{display:block}
+.steps{display:flex;gap:.5rem;margin-bottom:1rem;font-size:.9rem;color:var(--mute)}
+.steps span{flex:1;border-top:4px solid var(--line);padding-top:.35rem}
+.steps span.done{border-color:var(--accent);color:var(--ink);font-weight:600}
+.btn{display:inline-block;border:0;border-radius:8px;padding:.7rem 1.3rem;font:inherit;font-weight:600;cursor:pointer;background:var(--accent);color:#fff}
+.btn:hover{background:var(--accent-d)}
+.btn.sec{background:#fff;color:var(--accent-d);border:1px solid var(--accent)}
+.btn.sec:hover{background:#EAF3F4}
+.row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.25rem}
+:focus-visible{outline:3px solid #2B8CFF;outline-offset:2px}
+label{display:block;font-weight:600;margin-bottom:.25rem}
+.opt{font-weight:400;color:var(--mute)}
+input[type=text],input[type=number],input[type=tel]{width:100%;padding:.6rem .7rem;border:1px solid #AFC0C3;border-radius:6px;font:inherit;background:#fff}
+input.bad{border-color:#C23B3B;background:#FFF2F2}
+input.out{border-color:#E5A52A;background:#FFFAEB}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.hint{font-size:.8rem;color:var(--mute);margin-top:.2rem}
+.err{color:#B02A2A;font-size:.9rem;margin-top:.5rem}
+.sym{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.4rem .8rem;margin:.5rem 0}
+.sym label{font-weight:400;display:flex;gap:.5rem;align-items:center;margin:0}
+.note{background:#EAF3F4;border-left:4px solid var(--accent);padding:.6rem .9rem;border-radius:4px;font-size:.92rem;margin:.75rem 0}
+.guide{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1.5rem 0}
+.guide div{border-left:3px solid var(--accent);padding-left:.8rem}
+.tabs{display:flex;gap:.4rem;margin:1rem 0;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:#fff;border-radius:8px 8px 0 0;padding:.5rem 1rem;font:inherit;cursor:pointer}
+.tab[aria-selected=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pane{display:none}.pane.on{display:block}
+.res-top{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center}
+.big{font-family:Georgia,serif;font-size:2.6rem;line-height:1}
+.gauge{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:1rem 0 .3rem}
+.gauge div{height:16px;border-radius:3px;opacity:.28}
+.gauge div.on{opacity:1;outline:3px solid var(--ink);outline-offset:1px}
+.glabels{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:.75rem;color:var(--mute);text-align:center}
+.bar{display:grid;grid-template-columns:190px 1fr 50px;gap:.6rem;align-items:center;font-size:.9rem;margin:.35rem 0}
+.bar i{display:block;height:12px;background:var(--accent);border-radius:3px}
+.sum dt{font-weight:600;float:left;clear:left;width:150px}.sum dd{margin:0 0 .3rem 150px}
+footer{margin-top:2rem;font-size:.8rem;color:var(--mute)}
+@media(max-width:600px){h1{font-size:1.6rem}.bar{grid-template-columns:110px 1fr 44px}.sum dt{float:none;width:auto}.sum dd{margin-left:0}}
+@media print{.notice~.wrap .row,.steps,.tabs{display:none}.notice{position:static}}
+
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1A1D;--card:#17262A;--ink:#E6F0F1;--mute:#9DB3B7;--line:#2B4046;--accent:#3FB0BB;--accent-d:#7CD3DB;--warn-bg:#3A2D10;--warn-ink:#F2D08A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1A1D;--card:#17262A;--ink:#E6F0F1;--mute:#9DB3B7;--line:#2B4046;--accent:#3FB0BB;--accent-d:#7CD3DB;--warn-bg:#3A2D10;--warn-ink:#F2D08A;color-scheme:dark}
+@media(prefers-color-scheme:dark){
+input[type=text],input[type=number],input[type=tel]{background:#0F1A1D;color:var(--ink);border-color:#4A6369}
+input.bad{background:#3A1717}input.out{background:#3A2D10}
+.tab{background:var(--card);color:var(--ink)}
+.btn,.tab[aria-selected=true]{color:#04252A}
+.btn.sec{background:transparent;color:var(--accent-d);border-color:var(--accent)}
+.btn.sec:hover{background:#1B3338}
+.note{background:#1B3338}
+#r-warn{background:#3A2D10!important}
+.notice{border-bottom-color:#6B5320}}
+</style>
+</head>
+<body>
+<div class="notice" role="alert"><strong>Bukan diagnosis.</strong> Hasil ini hanya perkiraan awal. Keputusan medis tetap ada pada dokter.</div>
+<div class="wrap">
+<div class="brand">Skrining Awal Tumor Payudara</div>
+
+<!-- HALAMAN 1: UTAMA -->
+<section class="view on" id="v1">
+ <div class="card">
+  <h1>Pahami hasil sitologi Anda sebelum bertemu dokter</h1>
+  <p>Masukkan angka dari lembar hasil sitologi, lalu lihat perkiraan risiko awal dan hal yang perlu disiapkan untuk konsultasi.</p>
+  <div class="guide">
+   <div><h3>1. Isi data diri</h3>Nama dan, jika ada, gejala yang Anda rasakan.</div>
+   <div><h3>2. Masukkan hasil sitologi</h3>30 angka dari lembar hasil.</div>
+   <div><h3>3. Lihat hasil</h3>Level risiko 1-5 dan anjuran persiapan.</div>
+  </div>
+  <div class="note"><strong>Batasan penggunaan:</strong> sistem ini memakai dataset publik Breast Cancer Wisconsin (Diagnostic), bukan data pasien nyata. Hasilnya bukan diagnosis dan tidak menggantikan pemeriksaan dokter.</div>
+  <div class="row"><button class="btn" data-go="2">Mulai skrining</button></div>
+ </div>
+</section>
+
+<!-- HALAMAN 2: DATA DIRI + GEJALA -->
+<section class="view" id="v2">
+ <div class="steps"><span class="done">1. Data diri</span><span>2. Hasil sitologi</span><span>3. Hasil</span></div>
+ <form class="card" id="f2" novalidate>
+  <h2>Data diri</h2>
+  <div class="grid">
+   <div><label for="nama">Nama</label><input type="text" id="nama" name="nama" autocomplete="name"><div class="err" id="e-nama" hidden>Nama wajib diisi.</div></div>
+   <div><label for="usia">Usia <span class="opt">(opsional)</span></label><input type="number" id="usia" name="usia" min="1" max="120"></div>
+   <div><label for="kontak">Kontak <span class="opt">(opsional)</span></label><input type="tel" id="kontak" name="kontak" autocomplete="tel"></div>
+  </div>
+  <h3 style="margin-top:1.5rem">Gejala yang dialami <span class="opt" style="font-family:inherit">(opsional)</span></h3>
+  <div class="note">Catatan gejala hanya disimpan dan tidak memengaruhi hasil skrining.</div>
+  <div class="sym" id="sym"></div>
+  <div class="row"><button type="button" class="btn sec" data-go="1">Kembali</button><button type="submit" class="btn">Lanjut</button></div>
+ </form>
+</section>
+
+<!-- HALAMAN 3: 30 FITUR -->
+<section class="view" id="v3">
+ <div class="steps"><span class="done">1. Data diri</span><span class="done">2. Hasil sitologi</span><span>3. Hasil</span></div>
+ <form class="card" id="f3" novalidate>
+  <h2>Hasil sitologi (30 nilai)</h2>
+  <p>Salin angka dari lembar hasil. Gunakan titik untuk desimal, misalnya 0.0978. Nilai tidak boleh kosong atau negatif.</p>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="panes"></div>
+  <div class="err" id="e3" hidden></div>
+  <div class="row">
+   <button type="button" class="btn sec" data-go="2">Kembali</button>
+   <button type="submit" class="btn">Lihat hasil</button>
+   <button type="button" class="btn sec" id="ex-b">Isi contoh jinak</button>
+   <button type="button" class="btn sec" id="ex-m">Isi contoh ganas</button>
+  </div>
+ </form>
+</section>
+
+<!-- HALAMAN 4: HASIL -->
+<section class="view" id="v4">
+ <div class="steps"><span class="done">1. Data diri</span><span class="done">2. Hasil sitologi</span><span class="done">3. Hasil</span></div>
+ <div class="card" id="result">
+  <h2>Hasil skrining</h2>
+  <div class="res-top"><div><div class="big" id="r-pct">0%</div><div class="hint">probabilitas ganas</div></div>
+   <div><div class="hint">Klasifikasi model</div><h3 id="r-label" style="margin:0"></h3></div></div>
+  <div class="gauge" id="gauge"></div>
+  <div class="glabels"><span>Sangat rendah</span><span>Rendah</span><span>Sedang</span><span>Tinggi</span><span>Sangat tinggi</span></div>
+  <h3 style="margin-top:1.5rem">Level risiko <span id="r-lvl"></span></h3>
+  <div class="note" id="r-adv"></div>
+  <div class="note" id="r-warn" hidden style="border-color:#E5A52A;background:#FFF4DC"></div>
+  <h3 style="margin-top:1.5rem">Fitur yang paling berpengaruh</h3>
+  <div id="r-bars"></div>
+  <div class="hint">Ilustrasi pada prototipe. Pada aplikasi final, nilai ini berasal dari koefisien Logistic Regression.</div>
+  <h3 style="margin-top:1.5rem">Ringkasan data Anda</h3>
+  <dl class="sum"><dt>Nama</dt><dd id="s-nama"></dd><dt>Usia</dt><dd id="s-usia"></dd><dt>Kontak</dt><dd id="s-kontak"></dd><dt>Catatan gejala</dt><dd id="s-gej"></dd></dl>
+  <div class="row"><button class="btn" id="again">Skrining ulang</button><button class="btn sec" onclick="window.print()">Cetak hasil</button></div>
+ </div>
+</section>
+<footer>Sumber data model: Wolberg et al. (1995), Breast Cancer Wisconsin (Diagnostic), UCI Machine Learning Repository, CC BY 4.0.</footer>
+</div>
+
+<script>
+// ===== Data =====
+const GROUPS=[['mean','Rata-rata (mean)'],['se','Galat baku (SE)'],['worst','Terburuk (worst)']];
+// [kunci, label, penjelasan, [min,max] mean, se, worst] sesuai rentang dataset
+const C=[
+['radius','Radius','Rata-rata jarak dari pusat ke tepi inti sel',[6.981,28.11],[0.1115,2.873],[7.93,36.04]],
+['texture','Tekstur','Variasi tingkat keabuan pada citra sel',[9.71,39.28],[0.3602,4.885],[12.02,49.54]],
+['perimeter','Keliling','Panjang tepi inti sel',[43.79,188.5],[0.757,21.98],[50.41,251.2]],
+['area','Luas','Luas inti sel',[143.5,2501],[6.802,542.2],[185.2,4254]],
+['smoothness','Kehalusan','Variasi panjang garis tepi sel',[0.05263,0.1634],[0.001713,0.03113],[0.07117,0.2226]],
+['compactness','Kekompakan','Keliling kuadrat dibagi luas, dikurangi 1',[0.01938,0.3454],[0.002252,0.1354],[0.02729,1.058]],
+['concavity','Kecekungan','Tingkat cekungan pada tepi sel',[0,0.4268],[0,0.396],[0,1.252]],
+['concave_points','Titik cekung','Jumlah bagian tepi yang cekung',[0,0.2012],[0,0.05279],[0,0.291]],
+['symmetry','Simetri','Kesimetrisan bentuk inti sel',[0.106,0.304],[0.007882,0.07895],[0.1565,0.6638]],
+['fractal_dimension','Dimensi fraktal','Kerumitan garis tepi sel',[0.04996,0.09744],[0.000895,0.02984],[0.05504,0.2075]]];
+const SAMPLE={
+b:[13.54,14.36,87.46,566.3,0.09779,0.08129,0.06664,0.04781,0.1885,0.05766,0.2699,0.7886,2.058,23.56,0.008462,0.0146,0.02387,0.01315,0.0198,0.0023,15.11,19.26,99.7,711.2,0.144,0.1773,0.239,0.1288,0.2977,0.07259],
+m:[17.99,10.38,122.8,1001,0.1184,0.2776,0.3001,0.1471,0.2419,0.07871,1.095,0.9053,8.589,153.4,0.006399,0.04904,0.05373,0.01587,0.03003,0.006193,25.38,17.33,184.6,2019,0.1622,0.6656,0.7119,0.2654,0.4601,0.1189]};
+const SYM=['Benjolan di payudara','Nyeri pada payudara','Perubahan kulit (kemerahan, berkerut)','Keluar cairan dari puting','Puting tertarik ke dalam','Benjolan di ketiak'];
+const LEVELS=[
+{n:1,t:'Sangat rendah',c:'--r1',a:'Risiko perkiraan sangat rendah. Tetap konsultasikan hasil ini ke dokter. Bawa lembar hasil sitologi asli dan catat sejak kapan Anda merasakan keluhan.'},
+{n:2,t:'Rendah',c:'--r2',a:'Risiko perkiraan rendah. Buat janji konsultasi, bawa lembar hasil sitologi, dan siapkan daftar keluhan beserta lamanya.'},
+{n:3,t:'Sedang',c:'--r3',a:'Risiko perkiraan sedang. Segera jadwalkan konsultasi. Bawa hasil sitologi, riwayat kesehatan keluarga, dan daftar obat yang sedang dikonsumsi.'},
+{n:4,t:'Tinggi',c:'--r4',a:'Risiko perkiraan tinggi. Segera temui dokter bedah atau dokter yang merujuk Anda. Bawa seluruh hasil pemeriksaan dan ajak pendamping.'},
+{n:5,t:'Sangat tinggi',c:'--r5',a:'Risiko perkiraan sangat tinggi. Segera temui dokter dan jangan menunda. Bawa seluruh hasil pemeriksaan dan ajak pendamping.'}];
+const $=s=>document.querySelector(s);
+const names=[];GROUPS.forEach(([g],gi)=>C.forEach(c=>names.push({k:g+'_'+c[0],lab:c[1],hint:c[2],rg:c[3+gi],g:gi})));
+
+// ===== Navigasi =====
+function go(n){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v'+n));window.scrollTo(0,0)}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+// ===== Halaman 2 =====
+$('#sym').innerHTML=SYM.map((s,i)=>`<label><input type="checkbox" class="sy" value="${s}">${s}</label>`).join('')+'<label><input type="checkbox" id="nosym">Tidak ada gejala</label>';
+$('#nosym').onchange=e=>{if(e.target.checked)document.querySelectorAll('.sy').forEach(x=>x.checked=false)};
+document.querySelectorAll('.sy').forEach(x=>x.onchange=()=>{if(x.checked)$('#nosym').checked=false});
+$('#f2').onsubmit=e=>{e.preventDefault();const ok=$('#nama').value.trim()!=='';$('#e-nama').hidden=ok;$('#nama').classList.toggle('bad',!ok);if(ok)go(3)};
+
+// ===== Halaman 3 =====
+$('#tabs').innerHTML=GROUPS.map((g,i)=>`<button type="button" class="tab" role="tab" aria-selected="${i==0}" data-t="${i}">${g[1]} <span class="hint" style="color:inherit" id="cnt${i}"></span></button>`).join('');
+$('#panes').innerHTML=GROUPS.map((g,i)=>`<div class="pane${i==0?' on':''}" id="p${i}"><div class="grid">`+names.filter(n=>n.g==i).map(n=>`<div><label for="${n.k}" title="${n.hint}">${n.lab}</label><input type="number" step="any" min="0" id="${n.k}" name="${n.k}" inputmode="decimal"><div class="hint">${n.hint}. Rentang umum: ${n.rg[0]} sampai ${n.rg[1]}</div></div>`).join('')+'</div></div>').join('');
+function tab(i){document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.t==i));document.querySelectorAll('.pane').forEach((p,j)=>p.classList.toggle('on',j==i))}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>tab(t.dataset.t));
+function counts(){GROUPS.forEach((_,i)=>{const f=names.filter(n=>n.g==i&&$('#'+n.k).value!=='').length;$('#cnt'+i).textContent=`(${f}/10)`})}
+document.querySelectorAll('#panes input').forEach(i=>i.oninput=counts);counts();
+function fill(a){names.forEach((n,i)=>{$('#'+n.k).value=a[i];$('#'+n.k).classList.remove('bad','out')});counts();$('#e3').hidden=true}
+$('#ex-b').onclick=()=>fill(SAMPLE.b);$('#ex-m').onclick=()=>fill(SAMPLE.m);
+
+let vals={},outOfRange=[];
+$('#f3').onsubmit=e=>{e.preventDefault();
+ const bad=[],out=[];vals={};
+ names.forEach(n=>{const el=$('#'+n.k),v=parseFloat(el.value);el.classList.remove('bad','out');
+  if(el.value===''||isNaN(v)||v<0){bad.push(n);el.classList.add('bad')}
+  else{vals[n.k]=v;if(v<n.rg[0]||v>n.rg[1]){out.push(n);el.classList.add('out')}}});
+ const er=$('#e3');
+ if(bad.length){er.hidden=false;er.textContent=`${bad.length} kolom belum valid. Isi semua kolom dengan angka 0 atau lebih.`;tab(bad[0].g);$('#'+bad[0].k).focus();return}
+ er.hidden=true;outOfRange=out;showResult()};
+
+// ===== Prediksi (SIMULASI) =====
+// GANTI fungsi ini dengan fetch('/predict', {method:'POST', body: JSON.stringify(v)}) ke Flask.
+// Respons yang diharapkan: {probability: 0-1, contributions: [{name, value}]}
+const Z={worst_perimeter:[107.3,33.6,.9],worst_concave_points:[.1146,.0657,1.2],worst_area:[880.6,569.4,.5],mean_concavity:[.0888,.0797,.5],worst_texture:[25.68,6.15,.3]};
+function predict(v){let s=-1.0;const ct=[];
+ for(const k in Z){const z=(v[k]-Z[k][0])/Z[k][1],c=z*Z[k][2];s+=c;ct.push({name:names.find(n=>n.k==k),value:c})}
+ return{probability:1/(1+Math.exp(-1.6*s)),contributions:ct}}
+
+function showResult(){
+ const r=predict(vals),p=r.probability,pct=Math.round(p*1000)/10;
+ const idx=p<.1?0:p<.3?1:p<.5?2:p<.8?3:4,L=LEVELS[idx];
+ $('#r-pct').textContent=pct+'%';
+ $('#r-label').textContent=p>=.5?'Cenderung ganas (malignant)':'Cenderung jinak (benign)';
+ $('#gauge').innerHTML=LEVELS.map((l,i)=>`<div class="${i==idx?'on':''}" style="background:var(${l.c})"></div>`).join('');
+ $('#r-lvl').textContent=`${L.n} dari 5: ${L.t}`;$('#r-adv').textContent=L.a;
+ const w=$('#r-warn');w.hidden=!outOfRange.length;
+ if(outOfRange.length){const ls=outOfRange.slice(0,3).map(n=>['mean ','SE ','worst '][n.g]+n.lab.toLowerCase()).join(', ');
+  w.textContent='Perhatian: '+outOfRange.length+' nilai berada di luar rentang dataset ('+ls+(outOfRange.length>3?', dst.':'')+'). Periksa kembali angka Anda, karena hasil bisa kurang andal.'}
+ const max=Math.max(...r.contributions.map(c=>Math.abs(c.value)));
+ $('#r-bars').innerHTML=r.contributions.sort((a,b)=>Math.abs(b.value)-Math.abs(a.value)).map(c=>`<div class="bar"><span>${['mean','SE','worst'][c.name.g]} ${c.name.lab.toLowerCase()}</span><i style="width:${Math.abs(c.value)/max*100}%;${c.value<0?'background:#7A9BA0':''}"></i><span>${c.value>0?'naik':'turun'}</span></div>`).join('')+'<div class="hint">Naik: mendorong risiko lebih tinggi. Turun: mendorong risiko lebih rendah.</div>';
+ $('#s-nama').textContent=$('#nama').value.trim();
+ $('#s-usia').textContent=$('#usia').value||'-';$('#s-kontak').textContent=$('#kontak').value||'-';
+ const g=[...document.querySelectorAll('.sy:checked')].map(x=>x.value);
+ $('#s-gej').textContent=g.length?g.join(', '):'Tidak ada gejala yang dicatat';
+ go(4)}
+
+$('#again').onclick=()=>{$('#f2').reset();$('#f3').reset();document.querySelectorAll('input').forEach(i=>i.classList.remove('bad','out'));counts();tab(0);go(1)};
+</script>
+</body>
+</html>
